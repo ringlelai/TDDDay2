@@ -1,0 +1,71 @@
+﻿@model HSDc.OnlineOrderSystem.Control.Dto.QueryOrder.OrderDetail
+
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <table id="orderTable" style="width:100%;">
+                <tr>
+                    <td id="nameLabel" style="width:400px;">會員名稱：</td>
+                    <td id="name">@Model.MemberName</td>
+                </tr>
+                <tr>
+                    <td id="orderIdLabel" style="width:400px;">訂單編號：</td>
+                    <td id="orderId">@Model.OrderNumber</td>
+                </tr>
+                <tr>
+                    <td id="orderDateLabel" style="width:400px;">訂單日期：</td>
+                    <td id="orderDate">@Model.OrderDate.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <td id="deliveryDateLabel" style="width:400px;">出貨日期：</td>
+                    <td id="deliveryDate">@Model.DeliveryDate.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <td id="expectedShippingDateLabel" style="width:400px;">預計到貨日期：</td>
+                    <td id="expectedShippingDate">@Model.ExpectedDate.ToString("MM/dd/yyyy")</td>
+                </tr>
+            </table>
+            <span></span>
+            <div class="tab-content-notab">
+                <table class="table table-condensed table-hover" style="width:700px;table-layout: fixed;">
+                    <colgroup>
+                        <col style="width:200px;">
+                        <col style="width:150px;">
+                        <col style="width:150px;">
+                        <col style="width:200px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="vrt" style="text-align:center;">書名</th>
+                            <th class="vrt" style="text-align:right;">數量</th>
+                            <th class="vrt" style="text-align:right;">價格</th>
+                            <th class="vrt" style="text-align:right;">小計</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{foreach (var item in Model.Items)
+                            {
+                            <tr>
+                                <td class="text-center">@item.BookName</td>
+                                <td class="text-right">@item.Quantity</td>
+                                <td class="text-right">@item.Price</td>
+                                <td class="text-right">@item.SubTotal</td>
+                            </tr>
+                                }
+                            }
+                        <tr>
+                            <td colspan="4" class="text-right" id="totalAmount">總計價格：@Model.TotalAmount</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

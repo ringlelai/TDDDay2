@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Query Member Order";
+}
+
+<h2>Query Member Order</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <button id="btnQuery">查詢</button>
+        </div>
+    </div>
+    <div class="row" style="display: none" id="orderList"></div>
+</div>
+
+@section scripts
+{
+<script>
+	$("#btnQuery").click(function() {
+		var member = $("#txtMember").val();
+		var pUrl = 'QueryMemberOrders';
+		var c = null;
+		$.when($.ajax({
+			type : 'get',
+			url : pUrl,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(data) {
+				c = data;
+			}
+		}).done(function() {
+			var h = '<div class="tab-content-notab">';
+			h += '<br><table class="table table-condensed table-hover" style="width:500px;table-layout: fixed;">';
+			h += '<colgroup><col style="width:150px;"><col style="width:150px;"><col style="width:150px;"><col style="width:200px;"></colgroup>';
+			h += '<thead><tr><th class="vrt" style="text-align:center;">訂單號碼</th><th class="vrt" style="text-align:center;">訂單日期</th><th class="vrt" style="text-align:center;">出貨日期</th><th class="vrt""></th></tr></thead><tbody>';
+			$.each(c , function(i , item){
+				h += '<tr><td class="text-center">'+item.OrderNumber+'</td>';
+				h += '<td class="text-center">' + getFormattedDate(new Date(parseInt(item.OrderDate.substr(6)))) + '</td>'
+				h += '<td class="text-center">'+getFormattedDate(new Date(parseInt(item.DeliveryDate.substr(6))))+'</td>'
+				var mUrl = 'QueryOrderDetails?OrderNumber=' + item.OrderNumber;
+				h += '<td class="text-left"><a href="'+ mUrl + '">查詢明細</td></tr>';
+			});
+			h += '</tbody></table></div>';
+			$("#orderList").empty();
+			$("#orderList").append(h);
+			$("#orderList").show();
+		}));
+	});
+
+	function getFormattedDate(date) {
+	    var year = date.getFullYear();
+	    var month = (1 + date.getMonth()).toString();
+	    month = month.length > 1 ? month : '0' + month;
+	    var day = date.getDate().toString();
+	    day = day.length > 1 ? day : '0' + day;
+	    return month + '/' + day + '/' + year;
+	}
+</script>
+}
+

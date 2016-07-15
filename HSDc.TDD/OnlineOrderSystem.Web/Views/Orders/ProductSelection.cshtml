@@ -1,0 +1,68 @@
+﻿@model IEnumerable<HSDc.OnlineOrderSystem.Control.Dto.PlaceOrder.ProductStocking>
+
+@{
+    ViewBag.Title = "瀏覽產品";
+}
+
+<h2>瀏覽產品</h2>
+
+<p>@Html.ActionLink("檢視購物車", "ViewCart")</p>
+<table class="table">
+    <tr>
+        <th>
+            產品名稱
+        </th>
+        <th>
+            目前數量
+        </th>
+        <th>
+            是否購買
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductQuantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelitem => item.UserHasBoughtStr)
+        </td>
+        <td>
+            <a class="btn" href="#" name="addToCart" onclick="addToCart('@item.ProductID')">加入購物車</a>
+        </td>
+
+</tr>
+}
+
+</table>
+
+@section scripts
+{
+    <script>
+        function addToCart(ProductID) {
+            var url = "/api/ShoppingCartApi?ProductId=" + ProductID;
+            $.when($.ajax({
+                type: 'get',
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    c = data;
+                },
+                error: function (e, xhr) {
+                    if (xhr.status == 403) {
+                        var response = $.parseJSON(xhr.responseText);
+                        window.location = response.LogOnUrl;
+                    }
+                }
+            }).done(function () {
+                alert(c);
+            }));
+        }
+    </script>
+}
